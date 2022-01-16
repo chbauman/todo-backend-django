@@ -13,10 +13,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class TodoGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TodoGroup
-        fields = ["id", "created", "parent_id", "name"]
+        fields = ["created", "parent_id", "name"]
 
 
 class TodoItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.TodoGroup
-        fields = ["id", "created", "parent_group_id", "text", "done"]
+        model = models.TodoItem
+        fields = ["id", "created", "parent_group_name", "text", "done"]

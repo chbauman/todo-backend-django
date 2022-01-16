@@ -19,7 +19,7 @@ class TodoGroup(TodoBase):
         related_name="sub_groups",
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, primary_key=True)
 
     class Meta:
         ordering = ["created"]
@@ -29,7 +29,7 @@ class TodoItem(TodoBase):
     owner = models.ForeignKey(
         "auth.User", related_name="items", on_delete=models.CASCADE
     )
-    parent_group_id = models.ForeignKey(
+    parent_group_name = models.ForeignKey(
         TodoGroup,
         related_name="sub_todos",
         on_delete=models.CASCADE,

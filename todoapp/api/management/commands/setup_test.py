@@ -2,7 +2,7 @@ from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 
-from todoapp.api.models import TodoGroup
+from todoapp.api.models import TodoGroup, TodoItem
 
 
 class Command(BaseCommand):
@@ -27,5 +27,17 @@ class Command(BaseCommand):
 
         # Create test data
         user = User.objects.get(username="admin")
-        root_group = TodoGroup(owner=user, name="root")
-        root_group.save()
+        roog_group_name = "root"
+        root_group = TodoGroup(owner=user, name=roog_group_name)
+        self.try_saving(root_group, f"Group {roog_group_name}")
+
+        root_item = TodoItem(
+            owner=user, parent_group_name=root_group, text="Sample text"
+        )
+        root_item.save()
+
+    def try_saving(self, obj, name):
+        try:
+            obj.save()
+        except IntegrityError:
+            print(f"{name} already exists.")
