@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.authtoken import views as authview
 from todoapp.api import views
 
 router = routers.DefaultRouter()
@@ -22,5 +23,6 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 urlpatterns += [
     path("admin/", admin.site.urls),
     path("", include(router.urls)),
+    path("api-token-auth/", authview.obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]

@@ -24,15 +24,23 @@ SECRET_KEY = "django-insecure-&8n9htk4j3=kbo+gf6)tn68u+575-^ngmuwq1q(@&pf_n^ckjy
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = ["chbauman.pythonanywhere.com", "127.0.0.1", "localhost"]
 
-ALLOWED_HOSTS = ["chbauman.pythonanywhere.com"]
+# Static files
 STATIC_ROOT = BASE_DIR / "static"
 
-# Application definition
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ]
+}
 
+# Application definition
 INSTALLED_APPS = [
     "todoapp.api",
     "rest_framework",
+    "rest_framework.authtoken",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
