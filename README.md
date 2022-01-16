@@ -4,25 +4,43 @@ Backend for Todo App
 
 ## Installation
 
+If the project is checked-out from git, the following commands are
+needed to start development.
+
 ```
 python -m venv venv
 venv/Scripts/activate
 pip install -r requirements.txt
+python manage.py runserver
 ```
 
-## Initialize DB for testing
+## Updating the Database and manual testing
+
+When there are changes to the database models, run the following
+commands to update the database.
 
 ```
 python manage.py makemigrations api
 python manage.py migrate
+```
+
+The following command creates some test users / data
+for manual testing.
+
+```
 python manage.py setup_test
-python manage.py runserver
 ```
 
 ## Deploy on PythonAnywhere
+
+If there were some changes to the source code, try the following
+for updating the production version on `pythonanywhere.com`.
 
 ```
 git pull
 python manage.py migrate
 python manage.py collectstatic
 ```
+
+Finally, the project may need to be reloaded.
+Under the `Web` tab, choose `Reload chbauman.pythonanywhere.com`.

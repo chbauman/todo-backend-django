@@ -13,7 +13,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class OwnedDetailView(generics.RetrieveUpdateDestroyAPIView):
-
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     pass
 
