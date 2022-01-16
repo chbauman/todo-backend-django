@@ -1,15 +1,15 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, generics, permissions
+from rest_framework import generics, permissions
 from todoapp.api import models, serializers
 from todoapp.api.permissions import IsOwner
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """API endpoint that allows users to be viewed or edited."""
+class UserCreateView(generics.CreateAPIView):
+    """API endpoint that allows users to be created."""
 
     queryset = User.objects.all().order_by("-date_joined")
-    serializer_class = serializers.UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.UserCreateSerializer
+    permission_classes = []
 
 
 class OwnedDetailView(generics.RetrieveUpdateDestroyAPIView):

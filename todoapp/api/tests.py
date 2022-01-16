@@ -25,9 +25,9 @@ class BasicTestCase(TestCase):
 
     def test_token_auth(self):
         """Test token authentication."""
-        self.client.logout()
+        new_client = APIClient()
         data = {"username": TEST_USER, "password": TEST_USER_PW}
-        resp = self.client.post("/api-token-auth/", data=data)
+        resp = new_client.post("/api-token-auth/", data=data)
         self.assertTrue("token" in resp.json(), resp.json())
 
     def test_get_items(self):
@@ -43,3 +43,10 @@ class BasicTestCase(TestCase):
         resp = self.client.get("/todo_groups/")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()), 1)
+
+    def test_user_creation(self):
+        """Create new user via API."""
+        new_client = APIClient()
+        data = {"username": "test_create", "password": "test", "email": "test@todo.ch"}
+        resp = new_client.post("/create_user/", data=data)
+        self.assertEqual(resp.status_code, 201)

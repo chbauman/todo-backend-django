@@ -4,10 +4,37 @@ from rest_framework import serializers
 from todoapp.api import models
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "username", "email"]
+        fields = ["username", "email"]
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={"input_type": "password"},
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password", "first_name", "last_name"]
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
+
+    def update(self, instance, validated_data):
+        user = super().update(instance, validated_data)
+        try:
+            user.set_password(validated_data["password"])
+            user.save()
+        except KeyError:
+            pass
+        return user
 
 
 class TodoGroupSerializer(serializers.ModelSerializer):
