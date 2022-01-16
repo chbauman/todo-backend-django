@@ -18,3 +18,11 @@ python manage.py migrate
 python manage.py setup_test
 python manage.py runserver
 ```
+
+## Deploy on PythonAnywhere
+
+```
+git pull
+python manage.py migrate
+python manage.py collectstatic
+```
