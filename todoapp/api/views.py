@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, status
+from rest_framework import serializers as rest_serializers
 from rest_framework.response import Response
 from todoapp.api import models, serializers
 from todoapp.api.permissions import IsOwner
@@ -32,13 +33,17 @@ class OwnedListView(generics.ListCreateAPIView):
             # Delete already existing if a list is posted
             self.model_class.objects.filter(owner=self.request.user).delete()
 
-            serializer = self.get_serializer(data=request.data, many=True)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(
-                serializer.data, status=status.HTTP_201_CREATED, headers=headers
-            )
+            # A for loop is used here because the groups need to be saved one
+            # after another since otherwise if a group refers to another one
+            # being currently posted, validation will fail!
+            for item in request.data:
+                serializer: rest_serializers.ModelSerializer = self.get_serializer(
+                    data=item
+                )
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
