@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -14,14 +15,17 @@ class BasicTestCase(TestCase):
 
         Create a user and some sample objects.
         """
-        user = User.objects.create_user(TEST_USER, password=TEST_USER_PW)
-        group = TodoGroup.objects.create(owner=user, name="root")
+        self.user = User.objects.create_user(TEST_USER, password=TEST_USER_PW)
+        group = TodoGroup.objects.create(owner=self.user, name="root")
         TodoItem.objects.create(
-            owner=user, parent_group_name=group, text="Sample text."
+            owner=self.user, parent_group_name=group, text="Sample text."
         )
 
         self.client = APIClient()
         self.client.login(username=TEST_USER, password=TEST_USER_PW)
+
+    def get_n_items(self):
+        return TodoItem.objects.filter(owner=self.user).count()
 
     def test_token_auth(self):
         """Test token authentication."""
@@ -36,6 +40,30 @@ class BasicTestCase(TestCase):
         resp = self.client.get("/todo_items/")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()), 1)
+
+    def test_save_item(self):
+        """Tests if user can post items."""
+
+        n_items = self.get_n_items()
+
+        single_item = {
+            "parent_group_name": "root",
+            "text": "Blah blah",
+            "created": datetime.now().isoformat(),
+        }
+
+        resp = self.client.post("/todo_items/", data=single_item)
+        self.assertEqual(resp.status_code, 201)
+        n_items_after = self.get_n_items()
+        self.assertEqual(n_items + 1, n_items_after)
+
+        # Check that previous items are replaced when a list
+        # of itmes is posted.
+        resp = self.client.post("/todo_items/", data=[single_item], format="json")
+        self.assertEqual(resp.status_code, 201)
+        n_items_end = self.get_n_items()
+        self.assertEqual(n_items_end, 1)
+        pass
 
     def test_get_groups(self):
         """Tests if user can get list of groups."""
