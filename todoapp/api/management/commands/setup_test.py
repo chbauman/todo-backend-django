@@ -27,14 +27,23 @@ class Command(BaseCommand):
 
         # Create test data
         user = User.objects.get(username="admin")
-        roog_group_name = "root"
-        root_group = TodoGroup(owner=user, name=roog_group_name)
-        self.try_saving(root_group, f"Group {roog_group_name}")
+        root_group_name = "root"
+        root_group = TodoGroup(owner=user, name=root_group_name)
+        self.try_saving(root_group, f"Group {root_group_name}")
 
         root_item = TodoItem(
             owner=user, parent_group_name=root_group, text="Sample text"
         )
         root_item.save()
+
+        sub_group_name = "sub group"
+        sub_group = TodoGroup(owner=user, name=sub_group_name, parent_id=root_group)
+        self.try_saving(sub_group, f"Group {sub_group_name}")
+
+        sub_item = TodoItem(
+            owner=user, parent_group_name=sub_group, text="Sample sub task text"
+        )
+        sub_item.save()
 
     def try_saving(self, obj, name):
         try:
