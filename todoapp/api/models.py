@@ -19,10 +19,11 @@ class TodoGroup(TodoBase):
         related_name="sub_groups",
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=30, primary_key=True)
+    name = models.CharField(max_length=30)
 
     class Meta:
         ordering = ["created"]
+        unique_together = ("owner", "name")
 
 
 class TodoItem(TodoBase):

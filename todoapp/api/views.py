@@ -36,14 +36,16 @@ class OwnedListView(generics.ListCreateAPIView):
             # A for loop is used here because the groups need to be saved one
             # after another since otherwise if a group refers to another one
             # being currently posted, validation will fail!
+            all_data = []
             for item in request.data:
                 serializer: rest_serializers.ModelSerializer = self.get_serializer(
                     data=item
                 )
                 serializer.is_valid(raise_exception=True)
                 self.perform_create(serializer)
+                all_data.append(serializer.data)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(all_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
