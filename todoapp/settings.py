@@ -73,7 +73,7 @@ ROOT_URLCONF = "todoapp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "build"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -85,6 +85,13 @@ TEMPLATES = [
         },
     },
 ]
+
+STATICFILES_DIRS = [
+    # Tell Django where to look for React's static files (css, js)
+    BASE_DIR
+    / "build/static",
+]
+
 
 WSGI_APPLICATION = "todoapp.wsgi.application"
 

@@ -44,3 +44,5 @@ python manage.py collectstatic
 
 Finally, the project may need to be reloaded.
 Under the `Web` tab, choose `Reload chbauman.pythonanywhere.com`.
+
+See: https://medium.com/codex/deploying-react-through-djangos-static-files-part-1-dev-setup-8a3a7b93c809
