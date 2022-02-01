@@ -97,6 +97,10 @@ class BasicTestCase(TestCase):
         )
         self.assertEqual(resp.status_code, 201)
 
+        # Get again
+        resp = self.client.get("/todo_groups/")
+        self.assertEqual(resp.status_code, 200)
+
     def test_get_groups(self):
         """Tests if user can get list of groups."""
 

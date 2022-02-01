@@ -52,6 +52,12 @@ class TodoGroupSerializer(serializers.ModelSerializer):
                 data["parent_name"] = ""
         super().__init__(instance, data, **kwargs)
 
+    def to_representation(self, instance):
+        ret_val = super().to_representation(instance)
+        if instance.parent_id is not None:
+            ret_val["parent_name"] = instance.parent_id.name
+        return ret_val
+
     def create(self, validated_data):
         par_name = validated_data.pop("parent_name", "")
         if par_name != "":
@@ -76,3 +82,8 @@ class TodoItemSerializer(serializers.ModelSerializer):
         )
         validated_data["parent_group_name"] = parent_group
         return super().create(validated_data)
+
+    def to_representation(self, instance):
+        ret_val = super().to_representation(instance)
+        ret_val["parent_group_name"] = instance.parent_group_name.name
+        return ret_val
