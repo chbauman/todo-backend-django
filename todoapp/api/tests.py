@@ -65,6 +65,22 @@ class BasicTestCase(TestCase):
         self.assertEqual(n_items_end, 1)
         pass
 
+    def test_save_root(self):
+        root_group = {
+            "parent_name": None,
+            "name": "root",
+            "created": datetime.now().isoformat(),
+        }
+        resp = self.client.post("/todo_groups/", data=[root_group], format="json")
+        self.assertEqual(resp.status_code, 201)
+
+        root_group = {
+            "name": "root",
+            "created": datetime.now().isoformat(),
+        }
+        resp = self.client.post("/todo_groups/", data=[root_group], format="json")
+        self.assertEqual(resp.status_code, 201)
+
     def test_save_group(self):
         root_group = {
             "parent_name": "",

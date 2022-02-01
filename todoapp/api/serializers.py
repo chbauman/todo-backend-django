@@ -44,6 +44,14 @@ class TodoGroupSerializer(serializers.ModelSerializer):
         model = models.TodoGroup
         fields = ["created", "parent_name", "name"]
 
+    def __init__(self, instance=None, data=None, **kwargs):
+        # Set default parent_name parameter.
+        if data is not None:
+            par_name = data.get("parent_name")
+            if par_name is None:
+                data["parent_name"] = ""
+        super().__init__(instance, data, **kwargs)
+
     def create(self, validated_data):
         par_name = validated_data.pop("parent_name", "")
         if par_name != "":
