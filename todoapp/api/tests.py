@@ -65,6 +65,22 @@ class BasicTestCase(TestCase):
         self.assertEqual(n_items_end, 1)
         pass
 
+    def test_save_group(self):
+        root_group = {
+            "parent_name": "",
+            "name": "root",
+            "created": datetime.now().isoformat(),
+        }
+        single_group = {
+            "parent_name": "root",
+            "name": "Group Name",
+            "created": datetime.now().isoformat(),
+        }
+        resp = self.client.post(
+            "/todo_groups/", data=[root_group, single_group], format="json"
+        )
+        self.assertEqual(resp.status_code, 201)
+
     def test_get_groups(self):
         """Tests if user can get list of groups."""
 
