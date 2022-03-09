@@ -37,6 +37,9 @@ If there were some changes to the source code, try the following
 for updating the production version on `pythonanywhere.com`.
 
 ```
+cd ~
+source .virtualenvs/venv/bin/activate
+cd todo-backend-django/
 git pull
 python manage.py migrate
 python manage.py collectstatic
